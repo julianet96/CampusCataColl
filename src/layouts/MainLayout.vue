@@ -94,7 +94,7 @@ const { t } = useI18n();
               </q-btn>
             </router-link>
 
-            <router-link :to="{ name: 'home' }">
+            <router-link :to="{ name: 'campus' }">
               <q-btn flat :class="path === '/galeri' ? 'selected' : ''" class="dashboard-nav-btn">
                 <div>
                   <q-icon name="view_list" />
