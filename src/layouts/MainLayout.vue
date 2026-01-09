@@ -77,7 +77,7 @@ const { t } = useI18n();
         <div class="mobile-menu-container">
           <nav class="dashboard-nav-mobile">
             <router-link :to="{ name: 'home'}">
-              <q-btn flat :class="path === '/' ? 'selected' : ''" class="dashboard-nav-btn" >
+              <q-btn flat :class="route.path === '/' ? 'selected' : ''" class="dashboard-nav-btn" >
                 <div>
                   <q-icon name="directions_car" />
                   <span class="font-bold-btn">{{ t('header.home') }}</span>
@@ -85,8 +85,8 @@ const { t } = useI18n();
               </q-btn>
             </router-link>
 
-            <router-link :to="{ name: 'home' }">
-              <q-btn flat :class="path === '/campus' ? 'selected' : ''" class="dashboard-nav-btn">
+            <router-link :to="{ name: 'campus' }">
+              <q-btn flat :class="route.path === '/campus' ? 'selected' : ''" class="dashboard-nav-btn">
                 <div>
                   <q-icon name="view_list" />
                   <span class="font-bold-btn">{{ t('header.campus') }}</span>
@@ -94,8 +94,8 @@ const { t } = useI18n();
               </q-btn>
             </router-link>
 
-            <router-link :to="{ name: 'campus' }">
-              <q-btn flat :class="path === '/galeri' ? 'selected' : ''" class="dashboard-nav-btn">
+            <router-link :to="{ name: 'home' }">
+              <q-btn flat :class="route.path === '/galeri' ? 'selected' : ''" class="dashboard-nav-btn">
                 <div>
                   <q-icon name="view_list" />
                   <span class="font-bold-btn">{{ t('header.galery') }}</span>
@@ -104,7 +104,7 @@ const { t } = useI18n();
             </router-link>
 
             <router-link :to="{ name: 'home' }">
-              <q-btn flat :class="path === '/contact' ? 'selected' : ''" class="dashboard-nav-btn">
+              <q-btn flat :class="route.path === '/contact' ? 'selected' : ''" class="dashboard-nav-btn">
                 <div>
                   <q-icon name="view_list" />
                   <span class="font-bold-btn">{{ t('header.contact') }}</span>
@@ -112,7 +112,7 @@ const { t } = useI18n();
               </q-btn>
             </router-link>
              <router-link :to="{ name: 'home' }">
-              <q-btn flat :class="path === '/inscription' ? 'selected' : ''" class="dashboard-nav-btn-inportant" >
+              <q-btn flat :class="route.path === '/inscription' ? 'selected' : ''" class="dashboard-nav-btn-inportant" >
                 <div>
                   <q-icon name="view_list" />
                   <span class="font-bold-btn">{{ t('header.inscription') }}</span>
