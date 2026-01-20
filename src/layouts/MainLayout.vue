@@ -48,7 +48,7 @@ const { t } = useI18n();
                     <q-item-section>{{ t('header.galery') }}</q-item-section>
                   </q-item>
                 </router-link>
-                <router-link :to="{ name: 'home' }">
+                <router-link :to="{ name: 'contact' }">
                   <q-item :class="route.path === '/contact' && 'active'" clickable v-ripple class="font-bold-btn">
                     <q-item-section>{{ t('header.contact') }}</q-item-section>
                   </q-item>
@@ -103,7 +103,7 @@ const { t } = useI18n();
               </q-btn>
             </router-link>
 
-            <router-link :to="{ name: 'home' }">
+            <router-link :to="{ name: 'contact' }">
               <q-btn flat :class="route.path === '/contact' ? 'selected' : ''" class="dashboard-nav-btn">
                 <div>
                   <q-icon name="view_list" />
