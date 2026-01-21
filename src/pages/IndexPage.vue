@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ContactForm } from 'src/types/ContactType';
 import { Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 
+function goTo(route:string) {
+  router.push(route)
+}
 
 const contactForm = ref<ContactForm>({} as ContactForm)
 </script>
@@ -15,8 +20,8 @@ const contactForm = ref<ContactForm>({} as ContactForm)
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4" style="font-family: Montserrat, sans-serif;"> CAMPUS CATA COLL</h1>
       <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto" style="font-family: Montserrat, sans-serif;">Formamos a la próxima generación de futbolistas con entrenadores profesionales, instalaciones de primera clase y programas especializados</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center" style="height: 45px;">
-        <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn" ></q-btn>
-        <q-btn label="GALERÍA"  color="accent" class="font-bold-btn"></q-btn>
+        <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn" @click="router.push('/inscription')" ></q-btn>
+        <q-btn label="GALERÍA"  color="accent" class="font-bold-btn" @click="router.push('/galery')"></q-btn>
       </div>
     </div>
   </section>
@@ -34,8 +39,8 @@ const contactForm = ref<ContactForm>({} as ContactForm)
           <p class="text-muted-foreground leading-relaxed" style="font-family: Montserrat, sans-serif; font-size: 17px;">Nuestro campus ofrece una experiencia de formación integral que va más allá del fútbol. Desarrollamos valores como el trabajo en equipo, la disciplina y el respeto, mientras perfeccionamos las habilidades técnicas y tácticas de cada jugador.</p>
           <p class="text-muted-foreground leading-relaxed" style="font-family: Montserrat, sans-serif; font-size: 17px;">Con más de 15 años de experiencia, hemos formado a cientos de jóvenes futbolistas, muchos de los cuales ahora juegan en equipos profesionales y academias de élite.</p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center" style="height: 45px;">
-            <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn" ></q-btn>
-            <q-btn label="Mas información" color="positive" class="font-bold-btn"></q-btn>
+            <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn"  @click="router.push('/inscription')"></q-btn>
+            <q-btn label="Mas información" color="positive" class="font-bold-btn" @click="router.push('/campus')"></q-btn>
           </div>
         </div>
         <div class="rounded-lg overflow-hidden">
@@ -74,7 +79,7 @@ const contactForm = ref<ContactForm>({} as ContactForm)
           <p class="text-muted-foreground leading-relaxed" style="font-family: Montserrat, sans-serif; font-size: 17px;">Aplicamos metodologías de entrenamiento utilizadas por academias de fútbol de élite europea, adaptadas a la realidad y necesidades de nuestros jóvenes jugadores.</p>
           <p class="text-muted-foreground leading-relaxed" style="font-family: Montserrat, sans-serif; font-size: 17px;">Cada sesión está cuidadosamente planificada para garantizar el desarrollo progresivo de habilidades técnicas, comprensión táctica y preparación física adecuada a cada edad.</p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center" style="height: 45px;">
-            <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn" ></q-btn>
+            <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn" @click="router.push('/inscription')"></q-btn>
             
           </div>
         </div>
