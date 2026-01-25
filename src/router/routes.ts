@@ -4,12 +4,20 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', name: 'home',  component: () => import('pages/IndexPage.vue') },
-      { path: 'campus', name: 'campus',  component: () => import('pages/Campus.vue') },
-      { path: 'galery', name: 'galery',  component: () => import('pages/Galery.vue') },
-      { path: 'contact', name: 'contact',  component: () => import('pages/Contacto.vue') },
-      { path: 'inscription', name: 'inscription',  component: () => import('pages/Inscription.vue') },
+    children: [
+      { path: '', name: 'home', component: () => import('pages/IndexPage.vue') },
+      { path: 'campus', name: 'campus', component: () => import('pages/Campus.vue') },
+      { path: 'galery', name: 'galery', component: () => import('pages/Galery.vue') },
+      { path: 'contact', name: 'contact', component: () => import('pages/Contacto.vue') },
+      { path: 'inscription', name: 'inscription', component: () => import('pages/Inscription.vue') },
       { path: 'start', name: 'start', component: () => import('pages/Login.vue') },
+    ],
+  },
+  {
+    path: '/admin',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [
+      { path: '', name: 'admin.home', component: () => import('pages/admin/AdminHome.vue') },
     ],
   },
 

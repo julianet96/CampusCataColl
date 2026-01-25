@@ -1,10 +1,3 @@
- Layout Builder
-Visible Header
-Visible Footer
-Visible left-side Drawer
-Visible right-side Drawer
-Inject Drawer content for scrolling
-Left Drawer
 <template>
   <q-layout view="hhh lpR fFf">
 
@@ -16,13 +9,22 @@ Left Drawer
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
           </q-avatar>
-          Title
+          Administración
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <!-- drawer content -->
+      <q-list padding>
+        <q-item to="/admin" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon name="home" />
+          </q-item-section>
+          <q-item-section>
+            Home
+          </q-item-section>
+        </q-item>
+      </q-list>
     </q-drawer>
 
     <q-page-container>
