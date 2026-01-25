@@ -192,30 +192,31 @@ const { t } = useI18n();
             <ul className="space-y-2 text-sm">
               <li>
                 <button
-                  className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2"
+                  className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2 cursor-pointer"
                   data-testid="link-footer-gallery"
+                  @click="router.push('/galery')"
                 >
                   Galería
                 </button>
               </li>
               <li>
                 <button
-                  className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2"
-                  data-testid="link-footer-contact"
+                  className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2 cursor-pointer"
+                  data-testid="link-footer-contact" @click="router.push('/contact')"
                 >
                   Contacto
                 </button>
               </li>
               <li>
                 <button
-                  className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2"
-                  data-testid="link-footer-registration"
+                  className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2 cursor-pointer"
+                  data-testid="link-footer-registration" @click="router.push('/inscription')"
                 >
                   Inscripción
                 </button>
               </li>
               <li>
-                <button className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2">
+                <button className="text-muted-foreground hover:text-foreground hover-elevate px-2 py-1 rounded-md -ml-2 cursor-pointer">
                   Preguntas Frecuentes
                 </button>
               </li>
@@ -240,14 +241,17 @@ const { t } = useI18n();
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2024 Campus Cata Coll. Todos los derechos reservados.</p>
             <div className="flex gap-6">
-              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md">
+              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md cursor-pointer">
                 Política de Privacidad
               </button>
-              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md">
+              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md cursor-pointer">
                 Términos y Condiciones
               </button>
-              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md">
+              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md cursor-pointer">
                 Política de Cookies
+              </button>
+              <button className="hover:text-foreground hover-elevate px-2 py-1 rounded-md cursor-pointer" @click="router.push('/start')">
+                Area administracion
               </button>
             </div>
           </div>
