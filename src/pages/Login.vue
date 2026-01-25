@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const loginEmail = ref('');
 const loginPassword = ref('');
 const rememberMe = ref(false);
+const router = useRouter();
 </script>
 
 <template>
@@ -56,6 +58,7 @@ const rememberMe = ref(false);
                 color="secondary"
                 text-color="black"
                 class="font-bold-btn w-full"
+                @click="router.push('/admin')"
               />
               <div class="text-center text-sm text-muted-foreground">
                 Si necesitas acceso, contacta con el responsable del campus.
