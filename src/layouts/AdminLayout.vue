@@ -16,7 +16,13 @@
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <q-list padding>
-        <q-item to="/admin" clickable v-ripple>
+        <q-item
+          to="/admin"
+          exact
+          clickable
+          v-ripple
+          active-class="bg-primary text-white"
+        >
           <q-item-section avatar>
             <q-icon name="home" />
           </q-item-section>
