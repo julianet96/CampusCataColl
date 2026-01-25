@@ -23,7 +23,7 @@
     </div>
 
     <div class="row q-col-gutter-lg">
-      <div class="col-12 col-lg-6">
+      <div class="col-12">
         <q-card bordered>
           <q-card-section>
             <div class="text-h6 text-weight-bold">
@@ -52,7 +52,7 @@
         </q-card>
       </div>
 
-      <div class="col-12 col-lg-6">
+      <div class="col-12">
         <q-card bordered>
           <q-card-section>
             <div class="text-h6 text-weight-bold">
