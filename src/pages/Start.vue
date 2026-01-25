@@ -20,30 +20,29 @@ const rememberMe = ref(false);
             <div class="space-y-3">
               <p class="text-secondary text-sm font-bold">Bienvenido</p>
               <h1 class="text-3xl md:text-4xl font-black">
-                Accede al Campus Cata Coll
+                Acceso administrativo
               </h1>
             </div>
             <p class="text-white/90 text-lg max-w-xl">
-              Gestiona tu inscripción, consulta horarios y recibe novedades del campus en un
-              solo lugar.
+              Área de gestión interna para el equipo administrativo del Campus Cata Coll.
             </p>
             <div class="grid sm:grid-cols-2 gap-4">
               <div class="shadcn-card rounded-xl border border-white/10 bg-black/40 text-white shadow-sm p-4">
                 <q-icon name="sports_soccer" size="2em" color="secondary" class="mb-3" />
-                <p class="font-bold mb-1">Seguimiento personalizado</p>
-                <p class="text-sm text-white/80">Tu progreso y entrenamientos siempre a mano.</p>
+                <p class="font-bold mb-1">Gestión de usuarios</p>
+                <p class="text-sm text-white/80">Controla accesos y datos clave del campus.</p>
               </div>
               <div class="shadcn-card rounded-xl border border-white/10 bg-black/40 text-white shadow-sm p-4">
                 <q-icon name="event_available" size="2em" color="secondary" class="mb-3" />
-                <p class="font-bold mb-1">Agenda dinámica</p>
-                <p class="text-sm text-white/80">Horarios, convocatorias y avisos en tiempo real.</p>
+                <p class="font-bold mb-1">Operaciones diarias</p>
+                <p class="text-sm text-white/80">Coordina horarios, avisos y novedades internas.</p>
               </div>
             </div>
           </div>
           <div class="shadcn-card rounded-xl border bg-card border-card-border text-card-foreground shadow-sm p-8">
             <div class="text-center mb-6">
               <h2 class="text-2xl font-black mb-2">Iniciar sesión</h2>
-              <p class="text-sm text-muted-foreground">Introduce tus datos para acceder</p>
+              <p class="text-sm text-muted-foreground">Solo para administradores autorizados</p>
             </div>
             <q-form class="space-y-5">
               <q-input v-model="loginEmail" filled label="Correo electrónico" type="email" />
@@ -59,8 +58,7 @@ const rememberMe = ref(false);
                 class="font-bold-btn w-full"
               />
               <div class="text-center text-sm text-muted-foreground">
-                ¿Aún no tienes cuenta?
-                <a href="#" class="text-secondary font-bold">Solicita acceso</a>
+                Si necesitas acceso, contacta con el responsable del campus.
               </div>
             </q-form>
           </div>
