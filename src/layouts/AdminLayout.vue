@@ -7,7 +7,7 @@
 
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            <img src="/img/logo_amarillo-286x300.png">
           </q-avatar>
           Administración
         </q-toolbar-title>
