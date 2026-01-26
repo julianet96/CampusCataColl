@@ -1,8 +1,41 @@
 <template>
   <q-page class="q-pa-lg">
     <div class="text-h5 text-weight-bold q-mb-md">
-      Reservas generadas
+      Reservas
     </div>
+      <div class="flex justify-start">
+      <div class="q-ma-md" style="border: solid 1px #E7D43D; border-radius: 5px;">
+        <p class="q-ma-sm text-h5"></p>
+        <q-input class="q-mx-sm" filled v-model="dateStartSelected" mask="date" :rules="['date']" label="Start date" style="max-width: 200px">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                <q-date v-model="dateStartSelected">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+        <q-input class="q-mx-sm" filled v-model="dateEndSelected" mask="date" :rules="['date']" label="End date" style="max-width: 200px">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                <q-date v-model="dateEndSelected">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      
+        <q-btn class="full-width" @click="changeDay" :disable="loadingProviders" icon="search" label="Search" color="secondary" />
+      </div>
+  </div>
 
     <q-card bordered>
         <q-table
