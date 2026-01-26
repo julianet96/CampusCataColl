@@ -5,65 +5,33 @@
     </div>
 
     <q-card bordered>
-      <q-card-section>
-        <div class="row q-col-gutter-md items-end">
-          <div class="col-12 col-md-4">
-            <q-input
-              v-model="search"
-              label="Buscar"
-              outlined
-              clearable
-              dense
-              placeholder="Nombre, email o categoría"
-            >
-              <template #append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </div>
-          <div class="col-12 col-md-3">
-            <q-input
-              v-model="startDate"
-              label="Desde"
-              outlined
-              dense
-              type="date"
-              clearable
-            />
-          </div>
-          <div class="col-12 col-md-3">
-            <q-input
-              v-model="endDate"
-              label="Hasta"
-              outlined
-              dense
-              type="date"
-              clearable
-            />
-          </div>
-          <div class="col-12 col-md-2">
-            <q-btn
-              color="primary"
-              label="Limpiar filtros"
-              class="full-width"
-              flat
-              @click="clearFilters"
-            />
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section class="q-pa-none">
         <q-table
-          :rows="filteredRows"
-          :columns="columns"
-          row-key="id"
-          flat
-          dense
-          no-data-label="No se encontraron reservas"
-          class="q-ma-none"
-        />
-      </q-card-section>
+         bordered
+        :rows="rows"
+        :columns="columns"
+        :filter="filter"
+        row-key="name"
+      >
+       <template v-slot:top-right>
+                <q-input borderless dense class="q-ml-auto mrt-input" v-model="search" placeholder="Search">
+                    <template v-slot:append>
+                        <q-icon name="search"></q-icon>
+                    </template>
+                </q-input>
+            </template>
+
+           
+
+            <template v-slot:body-cell-actions="props">
+                <q-td :props="props">
+                    <q-btn-group push unelevated>
+                        <q-btn color="primary" icon="edit" @click="editAgency(props.row.uuid)" />
+                        <q-btn color="secondary" icon="visibility" @click="viewAgencyUsers(props.row.uuid)" />
+                    </q-btn-group>
+                </q-td>
+            </template>
+
+      </q-table>
     </q-card>
   </q-page>
 </template>
@@ -71,9 +39,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-const search = ref('');
-const startDate = ref('');
-const endDate = ref('');
+const filter = ref()
 
 const columns = [
   { name: 'id', label: 'ID', field: 'id', align: 'left', sortable: true },
@@ -82,6 +48,7 @@ const columns = [
   { name: 'category', label: 'Categoría', field: 'category', align: 'left', sortable: true },
   { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
   { name: 'status', label: 'Estado', field: 'status', align: 'left' },
+  { name: 'actions', label: 'Actions', field: 'actions', align: 'center' },
 ];
 
 const rows = [
@@ -135,27 +102,4 @@ const rows = [
   },
 ];
 
-const filteredRows = computed(() => {
-  const query = search.value.trim().toLowerCase();
-  const start = startDate.value ? new Date(startDate.value) : null;
-  const end = endDate.value ? new Date(endDate.value) : null;
-
-  return rows.filter((row) => {
-    const matchesSearch = query
-      ? `${row.name} ${row.email} ${row.category}`.toLowerCase().includes(query)
-      : true;
-
-    const rowDate = new Date(row.date);
-    const matchesStart = start ? rowDate >= start : true;
-    const matchesEnd = end ? rowDate <= end : true;
-
-    return matchesSearch && matchesStart && matchesEnd;
-  });
-});
-
-const clearFilters = () => {
-  search.value = '';
-  startDate.value = '';
-  endDate.value = '';
-};
 </script>
