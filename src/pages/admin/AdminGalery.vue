@@ -44,7 +44,7 @@ const folders = ref<FolderItem[]>([
 const newFolderName = ref('');
 const newFolderDescription = ref('');
 const selectedFolderId = ref<string | null>(null);
-const newImageSrc = ref('');
+const newImageFile = ref<File | null>(null);
 const newImageDescription = ref('');
 
 const folderOptions = computed(() =>
@@ -55,7 +55,7 @@ const canAddFolder = computed(() => newFolderName.value.trim().length > 0);
 const canAddImage = computed(
   () =>
     Boolean(selectedFolderId.value) &&
-    newImageSrc.value.trim().length > 0 &&
+    Boolean(newImageFile.value) &&
     newImageDescription.value.trim().length > 0
 );
 
@@ -87,13 +87,18 @@ const addImage = () => {
     return;
   }
 
+  const file = newImageFile.value;
+  if (!file) {
+    return;
+  }
+
   targetFolder.images.push({
     id: createId('image'),
-    src: newImageSrc.value.trim(),
+    src: URL.createObjectURL(file),
     description: newImageDescription.value.trim(),
   });
 
-  newImageSrc.value = '';
+  newImageFile.value = null;
   newImageDescription.value = '';
 };
 
@@ -160,11 +165,13 @@ const removeImage = (folderId: string, imageId: string) => {
                 emit-value
                 map-options
               />
-              <q-input
-                v-model="newImageSrc"
-                label="Ruta de la imagen"
+              <q-file
+                v-model="newImageFile"
+                label="Subir imagen"
                 outlined
+                accept="image/*"
                 class="q-mt-md"
+                clearable
               />
               <q-input
                 v-model="newImageDescription"
