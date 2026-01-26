@@ -30,6 +30,20 @@
             Home
           </q-item-section>
         </q-item>
+        <q-item
+          to="/admin/inscriptions"
+          exact
+          clickable
+          v-ripple
+          active-class="bg-primary text-white"
+        >
+          <q-item-section avatar>
+            <q-icon name="event_note" />
+          </q-item-section>
+          <q-item-section>
+            Reservas
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 

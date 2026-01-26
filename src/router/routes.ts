@@ -18,6 +18,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', name: 'admin.home', component: () => import('pages/admin/AdminHome.vue') },
+      {
+        path: 'inscriptions',
+        name: 'admin.inscriptions',
+        component: () => import('pages/admin/AdminInscriptions.vue'),
+      },
     ],
   },
 
