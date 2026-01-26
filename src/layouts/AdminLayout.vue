@@ -6,10 +6,10 @@
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <q-avatar>
-            <img src="/img/logo_amarillo-286x300.png">
-          </q-avatar>
-          Administración
+            <q-avatar square size="70px" class="navbar-avatar">
+                <img src="/img/logo_amarillo-286x300.png">
+            </q-avatar>
+          <span class="navbar-title font-bold">Administracion</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
