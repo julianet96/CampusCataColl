@@ -19,6 +19,11 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', name: 'admin.home', component: () => import('pages/admin/AdminHome.vue') },
       {
+        path: 'galery',
+        name: 'admin.galery',
+        component: () => import('pages/admin/AdminGalery.vue'),
+      },
+      {
         path: 'inscriptions',
         name: 'admin.inscriptions',
         component: () => import('pages/admin/AdminInscriptions.vue'),

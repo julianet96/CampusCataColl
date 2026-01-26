@@ -44,6 +44,20 @@
             Reservas
           </q-item-section>
         </q-item>
+        <q-item
+          to="/admin/galery"
+          exact
+          clickable
+          v-ripple
+          active-class="bg-primary text-white"
+        >
+          <q-item-section avatar>
+            <q-icon name="photo_library" />
+          </q-item-section>
+          <q-item-section>
+            Galería
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
