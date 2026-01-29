@@ -45,6 +45,20 @@
           </q-item-section>
         </q-item>
         <q-item
+          to="/admin/registro"
+          exact
+          clickable
+          v-ripple
+          active-class="bg-primary text-white"
+        >
+          <q-item-section avatar>
+            <q-icon name="assignment" />
+          </q-item-section>
+          <q-item-section>
+            Registro
+          </q-item-section>
+        </q-item>
+        <q-item
           to="/admin/galery"
           exact
           clickable

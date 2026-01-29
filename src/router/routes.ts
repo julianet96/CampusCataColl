@@ -28,6 +28,11 @@ const routes: RouteRecordRaw[] = [
         name: 'admin.inscriptions',
         component: () => import('pages/admin/AdminInscriptions.vue'),
       },
+      {
+        path: 'registro',
+        name: 'admin.registro',
+        component: () => import('pages/admin/AdminRegistrationSteps.vue'),
+      },
     ],
   },
 
