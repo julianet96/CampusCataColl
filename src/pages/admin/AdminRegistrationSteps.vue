@@ -5,8 +5,8 @@ import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
 type FieldType = 'STRING' | 'NUMBER' | 'SELECT';
 
 interface RegistrationField extends inscriptionData {
-  optionsText?: string;
   type: FieldType;
+  newOption?: string;
 }
 
 interface RegistrationStep extends inscriptionStape {
@@ -39,7 +39,6 @@ const steps = ref<RegistrationStep[]>([
         label: 'Categoría',
         value: '',
         options: ['Infantil', 'Cadete', 'Juvenil'],
-        optionsText: 'Infantil, Cadete, Juvenil',
       },
     ],
   },
@@ -107,13 +106,17 @@ const removeField = (step: RegistrationStep, index: number) => {
   step.inscriptionData.splice(index, 1);
 };
 
-const updateOptions = (field: RegistrationField, value: string | number | null) => {
-  const textValue = String(value ?? '');
-  field.optionsText = textValue;
-  field.options = textValue
-    .split(',')
-    .map((option) => option.trim())
-    .filter(Boolean);
+const addOption = (field: RegistrationField) => {
+  const textValue = (field.newOption ?? '').trim();
+  if (!textValue) {
+    return;
+  }
+  field.options = [...field.options, textValue];
+  field.newOption = '';
+};
+
+const removeOption = (field: RegistrationField, index: number) => {
+  field.options.splice(index, 1);
 };
 </script>
 
@@ -247,18 +250,35 @@ const updateOptions = (field: RegistrationField, value: string | number | null) 
                 </q-card-section>
 
                 <q-card-section class="q-pt-none">
-                  <q-input
-                    v-if="field.type === 'SELECT'"
-                    v-model="field.optionsText"
-                    label="Opciones del selector"
-                    hint="Separadas por coma"
-                    outlined
-                    @update:model-value="(value) => updateOptions(field, value)"
-                  />
-                  <div v-if="field.type === 'SELECT' && field.options.length" class="q-mt-sm">
-                    <q-chip v-for="option in field.options" :key="option" color="primary" text-color="white">
-                      {{ option }}
-                    </q-chip>
+                  <div v-if="field.type === 'SELECT'">
+                    <div class="row items-center q-col-gutter-sm">
+                      <div class="col">
+                        <q-input
+                          v-model="field.newOption"
+                          label="Nueva opción"
+                          outlined
+                          @keyup.enter="addOption(field)"
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <q-btn color="primary" icon="add" label="Agregar" @click="addOption(field)" />
+                      </div>
+                    </div>
+                    <div v-if="field.options.length" class="q-mt-sm row q-col-gutter-sm">
+                      <q-chip
+                        v-for="(option, optionIndex) in field.options"
+                        :key="`${option}-${optionIndex}`"
+                        color="primary"
+                        text-color="white"
+                        removable
+                        @remove="removeOption(field, optionIndex)"
+                      >
+                        {{ option }}
+                      </q-chip>
+                    </div>
+                    <div v-else class="text-caption text-grey-6 q-mt-sm">
+                      Añade opciones para este selector.
+                    </div>
                   </div>
                   <div class="text-caption text-grey-6 q-mt-sm">
                     {{ field.type === 'STRING' ? 'Campo de texto libre.' : field.type === 'NUMBER' ? 'Solo números.' : 'El usuario seleccionará una opción.' }}
