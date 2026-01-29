@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { inscriptionData } from 'src/entity/inscriptions';
+import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
 
 
 const step= ref(1)
@@ -8,18 +8,14 @@ const total = ref<number>(0)
 const form1 = ref()
 const form2 = ref()
 const inscription = ref<inscriptionData>({} as inscriptionData)
+const steps = ref<inscriptionStape[]>([])
 
-const nextStep1 = async () => {
-  const valid = await form1.value.validate()
-  if (valid) step.value++
+const nextStep = async (inscrip:inscriptionStape) => {
+  console.log(inscrip)
+  step.value ++
 }
 
-const nextStep2 = async () => {
-  const valid = await form2.value.validate()
-  if (valid) {
-    console.log('Formulario completo:', inscription.value)
-  }
-}
+
 
 </script>
 
@@ -40,42 +36,39 @@ const nextStep2 = async () => {
                         >
 
                          <q-step
-                            :name="1"
-                            title="Select campaign settings"
-                            icon="settings"
-                            :done="step > 1"
+                            v-for="(cmpStep, i) in steps"
+                            :name="cmpStep.order"
+                            :title="cmpStep.name"
+                            :icon="cmpStep.icon"
+                            :done="step > i"
                         >
-                            <q-form ref="form1">
+                            <div v-for="inscData in cmpStep.inscriptionData">
                                 <q-input
-                                    v-model="inscription.playerName"
-                                    label="NOMBRE Y APELLIDOS DEL JUGADOR/A"
+                                    v-if="inscData.type == 'STRING'"
+                                    v-model="inscData.value"
+                                    :label="inscData.label"
                                     :rules="[val => !!val || 'Campo obligatorio']"
                                 />
 
                                 <q-input
-                                    v-model="inscription.email"
-                                    label="Email"
+                                    v-if="inscData.type == 'NUMBER'"
+                                    v-model="inscData.value"
+                                    :label="inscData.label"
+                                    type="number"
                                     :rules="[val => !!val || 'Campo obligatorio']"
                                 />
-                            </q-form>
+
+                                <q-select
+                                    v-if="inscData.type == 'SELECT'"
+                                    v-model="inscData.value"
+                                    :label="inscData.label"
+                                    :options="inscData.options"
+                                />
+                            </div>
 
                             <q-stepper-navigation>
-                                <q-btn label="Siguiente" color="primary" @click="nextStep1" />
-                            </q-stepper-navigation>
-                        </q-step>
-
-                        <q-step :name="2" title="Dirección">
-                            <q-form ref="form2">
-                                <q-input
-                                    v-model="inscription.phone"
-                                    label="Dirección"
-                                    :rules="[val => !!val || 'Campo obligatorio']"
-                                />
-                            </q-form>
-
-                            <q-stepper-navigation>
-                                <q-btn label="Atrás" flat @click="step--" />
-                                <q-btn label="Finalizar" color="primary" @click="nextStep2" />
+                                <q-btn v-if="cmpStep.order > 1" label="Atrás" flat @click="step--" />
+                                <q-btn label="Siguiente" color="primary" @click="nextStep(cmpStep)" />
                             </q-stepper-navigation>
                         </q-step>
                     </q-stepper>

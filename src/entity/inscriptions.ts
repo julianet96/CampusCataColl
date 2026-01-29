@@ -1,7 +1,14 @@
 export interface inscriptionData {
-    email:string;
-    playerName:string;
-    playerYear:number;
-    playerDni:string;
-    phone:string;
+    type:string;
+    label:string;
+    value:string;
+    options:string[]
+}
+
+
+export interface inscriptionStape {
+    name:string
+    icon:string
+    order:number
+    inscriptionData: inscriptionData []
 }
