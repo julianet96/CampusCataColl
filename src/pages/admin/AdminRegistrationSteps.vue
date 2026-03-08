@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
+import { InscriptionConfigApi } from 'src/api/InscriptionConfigApi';
 
 type FieldType = 'STRING' | 'NUMBER' | 'SELECT';
 
 interface RegistrationField extends inscriptionData {
   type: FieldType;
-  newOption?: string;
+  newOption?: string; // solo para UI
 }
 
 interface RegistrationStep extends inscriptionStape {
@@ -19,36 +20,20 @@ const fieldTypeOptions = [
   { label: 'Selector', value: 'SELECT' },
 ];
 
-const steps = ref<RegistrationStep[]>([
-  {
-    name: 'Datos personales',
-    icon: 'person',
-    order: 1,
-    inscriptionData: [
-      { type: 'STRING', label: 'Nombre y apellidos', value: '', options: [] },
-      { type: 'NUMBER', label: 'Año de nacimiento', value: '', options: [] },
-    ],
-  },
-  {
-    name: 'Preferencias deportivas',
-    icon: 'sports_soccer',
-    order: 2,
-    inscriptionData: [
-      {
-        type: 'SELECT',
-        label: 'Categoría',
-        value: '',
-        options: ['Infantil', 'Cadete', 'Juvenil'],
-      },
-    ],
-  },
-]);
+const steps = ref<RegistrationStep[]>([]);
 
 const selectedOrder = ref<number>(steps.value[0]?.order ?? 1);
 
 const selectedStep = computed(() =>
   steps.value.find((step) => step.order === selectedOrder.value),
 );
+
+// Estados de carga / guardado
+const isLoading = ref(false);
+const isSaving = ref(false);
+const loadError = ref('');
+const saveError = ref('');
+const saveSuccess = ref(false);
 
 const syncOrders = () => {
   steps.value = steps.value.map((step, index) => ({
@@ -84,9 +69,7 @@ const moveStep = (order: number, direction: 'up' | 'down') => {
   }
   const reordered = [...steps.value];
   const [moved] = reordered.splice(index, 1);
-  if (!moved) {
-    return;
-  }
+  if (!moved) return;
   reordered.splice(targetIndex, 0, moved);
   steps.value = reordered;
   syncOrders();
@@ -108,9 +91,7 @@ const removeField = (step: RegistrationStep, index: number) => {
 
 const addOption = (field: RegistrationField) => {
   const textValue = (field.newOption ?? '').trim();
-  if (!textValue) {
-    return;
-  }
+  if (!textValue) return;
   field.options = [...field.options, textValue];
   field.newOption = '';
 };
@@ -118,15 +99,93 @@ const addOption = (field: RegistrationField) => {
 const removeOption = (field: RegistrationField, index: number) => {
   field.options.splice(index, 1);
 };
+
+// --- Integración con backend (InscriptionConfigApi) ---
+
+const loadConfig = async () => {
+  isLoading.value = true;
+  loadError.value = '';
+  saveSuccess.value = false;
+
+  try {
+    const config = await InscriptionConfigApi.getConfig();
+    const loadedSteps = config.steps ?? [];
+    if (Array.isArray(loadedSteps) && loadedSteps.length > 0) {
+      steps.value = loadedSteps as RegistrationStep[];
+      syncOrders();
+    }
+  } catch (err: any) {
+    loadError.value = err?.error || err?.message || 'No se pudo cargar la configuración.';
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const saveConfig = async () => {
+  isSaving.value = true;
+  saveError.value = '';
+  saveSuccess.value = false;
+
+  try {
+    const config = await InscriptionConfigApi.saveConfig(steps.value as any);
+    const savedSteps = config.steps ?? [];
+    if (Array.isArray(savedSteps) && savedSteps.length > 0) {
+      steps.value = savedSteps as RegistrationStep[];
+      syncOrders();
+    }
+    saveSuccess.value = true;
+    setTimeout(() => {
+      saveSuccess.value = false;
+    }, 2500);
+  } catch (err: any) {
+    saveError.value = err?.error || err?.message || 'No se pudo guardar la configuración.';
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+onMounted(() => {
+  loadConfig();
+});
 </script>
 
 <template>
   <q-page class="q-pa-lg">
-    <div class="text-h5 text-weight-bold q-mb-md">
-      Configuración de pasos de inscripción
+    <div class="row items-center justify-between q-mb-md">
+      <div>
+        <div class="text-h5 text-weight-bold">
+          Configuración de pasos de inscripción
+        </div>
+        <div class="text-subtitle2 text-grey-7">
+          Define los pasos del formulario y los campos que verá cada familia durante el registro.
+        </div>
+      </div>
+      <div class="row items-center q-gutter-sm">
+        <q-btn
+          color="primary"
+          icon="save"
+          label="Guardar configuración"
+          :loading="isSaving"
+          @click="saveConfig"
+        />
+        <q-btn
+          flat
+          color="primary"
+          icon="refresh"
+          :loading="isLoading"
+          @click="loadConfig"
+        />
+      </div>
     </div>
-    <div class="text-subtitle2 text-grey-7 q-mb-lg">
-      Define los pasos del formulario y los campos que verá cada familia durante el registro.
+
+    <div v-if="loadError" class="text-negative q-mb-sm">
+      {{ loadError }}
+    </div>
+    <div v-if="saveError" class="text-negative q-mb-sm">
+      {{ saveError }}
+    </div>
+    <div v-if="saveSuccess" class="text-positive q-mb-sm">
+      Configuración guardada correctamente.
     </div>
 
     <div class="row q-col-gutter-xl">
@@ -152,7 +211,9 @@ const removeOption = (field: RegistrationField, index: number) => {
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ step.order }}. {{ step.name }}</q-item-label>
-                  <q-item-label caption>{{ step.inscriptionData.length }} campos</q-item-label>
+                  <q-item-label caption>
+                    {{ step.inscriptionData.length }} campos
+                  </q-item-label>
                 </q-item-section>
                 <q-item-section side class="q-gutter-xs">
                   <q-btn
@@ -196,7 +257,9 @@ const removeOption = (field: RegistrationField, index: number) => {
           <q-card-section class="row items-center justify-between">
             <div>
               <div class="text-h6 text-weight-bold">Detalle del paso</div>
-              <div class="text-caption text-grey-6">Configura nombre, icono y campos.</div>
+              <div class="text-caption text-grey-6">
+                Configura nombre, icono y campos.
+              </div>
             </div>
             <q-btn
               color="secondary"
@@ -261,7 +324,12 @@ const removeOption = (field: RegistrationField, index: number) => {
                         />
                       </div>
                       <div class="col-auto">
-                        <q-btn color="primary" icon="add" label="Agregar" @click="addOption(field)" />
+                        <q-btn
+                          color="primary"
+                          icon="add"
+                          label="Agregar"
+                          @click="addOption(field)"
+                        />
                       </div>
                     </div>
                     <div v-if="field.options.length" class="q-mt-sm row q-col-gutter-sm">
@@ -281,7 +349,13 @@ const removeOption = (field: RegistrationField, index: number) => {
                     </div>
                   </div>
                   <div class="text-caption text-grey-6 q-mt-sm">
-                    {{ field.type === 'STRING' ? 'Campo de texto libre.' : field.type === 'NUMBER' ? 'Solo números.' : 'El usuario seleccionará una opción.' }}
+                    {{
+                      field.type === 'STRING'
+                        ? 'Campo de texto libre.'
+                        : field.type === 'NUMBER'
+                          ? 'Solo números.'
+                          : 'El usuario seleccionará una opción.'
+                    }}
                   </div>
                 </q-card-section>
               </q-card>
@@ -299,7 +373,9 @@ const removeOption = (field: RegistrationField, index: number) => {
         <q-card bordered class="q-mt-lg">
           <q-card-section>
             <div class="text-h6 text-weight-bold">Resumen rápido</div>
-            <div class="text-caption text-grey-6">Vista general de la estructura configurada.</div>
+            <div class="text-caption text-grey-6">
+              Vista general de la estructura configurada.
+            </div>
           </q-card-section>
           <q-separator />
           <q-card-section>
@@ -312,7 +388,11 @@ const removeOption = (field: RegistrationField, index: number) => {
                 :icon="step.icon"
               >
                 <q-item-label caption>
-                  Orden {{ step.order }} · {{ step.inscriptionData.map((field) => field.label).join(', ') || 'Sin campos aún' }}
+                  Orden {{ step.order }} ·
+                  {{
+                    step.inscriptionData.map((field) => field.label).join(', ') ||
+                      'Sin campos aún'
+                  }}
                 </q-item-label>
               </q-timeline-entry>
             </q-timeline>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { Ref, ref, onMounted } from 'vue';
 import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
 
 
@@ -14,6 +14,34 @@ const nextStep = async (inscrip:inscriptionStape) => {
   console.log(inscrip)
   step.value ++
 }
+
+onMounted(() => {
+   steps.value = [
+  {
+    name: 'Datos personales',
+    icon: 'person',
+    order: 1,
+    inscriptionData: [
+      { type: 'STRING', label: 'Nombre y apellidos', value: '', options: [] },
+      { type: 'NUMBER', label: 'Año de nacimiento', value: '', options: [] },
+    ],
+  },
+  {
+    name: 'Preferencias deportivas',
+    icon: 'sports_soccer',
+    order: 2,
+    inscriptionData: [
+      {
+        type: 'SELECT',
+        label: 'Categoría',
+        value: '',
+        options: ['Infantil', 'Cadete', 'Juvenil'],
+      },
+    ],
+  },
+];
+
+})
 
 
 

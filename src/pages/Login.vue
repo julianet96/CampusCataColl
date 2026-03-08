@@ -1,11 +1,47 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
-const loginEmail = ref('');
-const loginPassword = ref('');
+import { auth } from 'src/entity/user';
+import { useQuasar } from 'quasar';
+import { AuthApi } from 'src/api/AuthApi';
+const authenticate = ref<auth>({} as auth)
 const rememberMe = ref(false);
 const router = useRouter();
+const $q = useQuasar();
+
+function autenticate(){
+  if(verifyAuthData()){
+    console.log("entro para autenticarme")
+    AuthApi.authenticate(authenticate.value) .then((response) => {
+      
+        console.log(response);
+        localStorage.setItem("token",response)
+        router.push('/admin')
+      
+    });
+  }
+}
+
+function verifyAuthData(){
+  if(authenticate.value.email == undefined || authenticate.value.email == ''){
+    $q.notify({
+      color: 'red',
+      message: "El correo debe de estar relleno"
+    })
+    return false;
+  }
+
+  if(authenticate.value.password == undefined || authenticate.value.password == ''){
+    $q.notify({
+      color:'red',
+      message:"La contraseña es obligatoria."
+    })
+    return false
+  }
+
+  return true
+}
+
 </script>
 
 <template>
@@ -47,8 +83,8 @@ const router = useRouter();
               <p class="text-sm text-muted-foreground">Solo para administradores autorizados</p>
             </div>
             <q-form class="space-y-5">
-              <q-input v-model="loginEmail" filled label="Correo electrónico" type="email" />
-              <q-input v-model="loginPassword" filled label="Contraseña" type="password" />
+              <q-input v-model="authenticate.email" filled label="Correo electrónico" type="email" />
+              <q-input v-model="authenticate.password" filled label="Contraseña" type="password" />
               <div class="flex items-center justify-between text-sm text-muted-foreground">
                 <q-checkbox v-model="rememberMe" label="Recordarme" />
                 <a href="#" class="text-secondary font-bold">¿Olvidaste la contraseña?</a>
@@ -58,7 +94,7 @@ const router = useRouter();
                 color="secondary"
                 text-color="black"
                 class="font-bold-btn w-full"
-                @click="router.push('/admin')"
+                @click="autenticate"
               />
               <div class="text-center text-sm text-muted-foreground">
                 Si necesitas acceso, contacta con el responsable del campus.
