@@ -29,6 +29,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/admin/AdminInscriptions.vue'),
       },
       {
+        path: 'campus-types',
+        name: 'admin.campusTypes',
+        component: () => import('pages/admin/AdminCampusTypes.vue'),
+      },
+      {
         path: 'registro',
         name: 'admin.registro',
         component: () => import('pages/admin/AdminRegistrationSteps.vue'),

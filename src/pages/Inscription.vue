@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Ref, ref, onMounted } from 'vue';
+import { Ref, ref, onMounted, computed, watch } from 'vue';
 import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
 import { InscriptionConfigApi } from 'src/api/InscriptionConfigApi';
-
+import { CampusTypeApi, type CampusType } from 'src/api/CampusTypeApi';
 
 const step = ref(1);
 const total = ref<number>(0);
@@ -11,23 +11,56 @@ const form2 = ref();
 const inscription = ref<inscriptionData>({} as inscriptionData);
 const steps = ref<inscriptionStape[]>([]);
 
+const campusTypes = ref<CampusType[]>([]);
+const selectedCampusTypeId = ref<string | null>(null);
+
+const activeCampusTypes = computed(() =>
+  campusTypes.value.filter((type) => type.active),
+);
+
+const selectedCampusType = computed(
+  () => activeCampusTypes.value.find((type) => type._id === selectedCampusTypeId.value) || null,
+);
+
+const campusStepOrder = computed(() => (steps.value?.length || 0) + 1);
+
+const displaySteps = computed<inscriptionStape[]>(() => [
+  ...steps.value,
+  {
+    name: 'Tipo de campus',
+    icon: 'event',
+    order: campusStepOrder.value,
+    inscriptionData: [],
+  } as inscriptionStape,
+]);
+
 const nextStep = async (inscrip: inscriptionStape) => {
   console.log(inscrip);
   step.value++;
 };
 
+watch(
+  selectedCampusType,
+  (type) => {
+    total.value = type ? type.price : 0;
+  },
+  { immediate: true },
+);
+
 onMounted(async () => {
   try {
-    const config = await InscriptionConfigApi.getConfig();
+    const [config, types] = await Promise.all([
+      InscriptionConfigApi.getConfig(),
+      CampusTypeApi.list(),
+    ]);
     steps.value = config.steps || [];
+    campusTypes.value = types;
   } catch (error) {
-    console.error('Error cargando configuración de inscripción', error);
+    console.error('Error cargando configuración de inscripción o tipos de campus', error);
     steps.value = [];
+    campusTypes.value = [];
   }
 });
-
-
-
 </script>
 
 <template>
@@ -47,34 +80,70 @@ onMounted(async () => {
                         >
 
                          <q-step
-                            v-for="(cmpStep, i) in steps"
+                            v-for="(cmpStep, i) in displaySteps"
+                            :key="cmpStep.order"
                             :name="cmpStep.order"
                             :title="cmpStep.name"
                             :icon="cmpStep.icon"
                             :done="step > i"
                         >
-                            <div v-for="inscData in cmpStep.inscriptionData">
-                                <q-input
-                                    v-if="inscData.type == 'STRING'"
-                                    v-model="inscData.value"
-                                    :label="inscData.label"
-                                    :rules="[val => !!val || 'Campo obligatorio']"
-                                />
+                            <div v-if="cmpStep.order !== campusStepOrder">
+                              <div v-for="inscData in cmpStep.inscriptionData" :key="inscData.label">
+                                  <q-input
+                                      v-if="inscData.type == 'STRING'"
+                                      v-model="inscData.value"
+                                      :label="inscData.label"
+                                      :rules="[val => !!val || 'Campo obligatorio']"
+                                  />
 
-                                <q-input
-                                    v-if="inscData.type == 'NUMBER'"
-                                    v-model="inscData.value"
-                                    :label="inscData.label"
-                                    type="number"
-                                    :rules="[val => !!val || 'Campo obligatorio']"
-                                />
+                                  <q-input
+                                      v-if="inscData.type == 'NUMBER'"
+                                      v-model="inscData.value"
+                                      :label="inscData.label"
+                                      type="number"
+                                      :rules="[val => !!val || 'Campo obligatorio']"
+                                  />
 
-                                <q-select
-                                    v-if="inscData.type == 'SELECT'"
-                                    v-model="inscData.value"
-                                    :label="inscData.label"
-                                    :options="inscData.options"
-                                />
+                                  <q-select
+                                      v-if="inscData.type == 'SELECT'"
+                                      v-model="inscData.value"
+                                      :label="inscData.label"
+                                      :options="inscData.options"
+                                  />
+                              </div>
+                            </div>
+
+                            <!-- Step dedicado para selección de tipo de campus -->
+                            <div v-else class="q-mt-lg">
+                              <q-separator spaced />
+                              <div class="text-h6 q-mb-sm">
+                                Selecciona el tipo de campus
+                              </div>
+
+                              <q-option-group
+                                v-model="selectedCampusTypeId"
+                                type="radio"
+                                :options="activeCampusTypes.map(type => ({
+                                  label: `${type.name} · ${type.startDate?.substring(0, 10)} - ${type.endDate?.substring(0, 10)} · ${type.price} €`,
+                                  value: type._id
+                                }))"
+                                :disable="activeCampusTypes.length === 0"
+                              />
+
+                              <div v-if="selectedCampusType" class="q-mt-md">
+                                <div>
+                                  <span class="font-bold">Fecha inicio:</span>
+                                  {{ selectedCampusType.startDate?.substring(0, 10) }}
+                                </div>
+                                <div>
+                                  <span class="font-bold">Fecha fin:</span>
+                                  {{ selectedCampusType.endDate?.substring(0, 10) }}
+                                </div>
+                                <div class="text-lg q-mt-sm">
+                                  <span class="font-bold">Precio:</span>
+                                  {{ selectedCampusType.price }} €
+                                </div>
+                              </div>
                             </div>
 
                             <q-stepper-navigation>

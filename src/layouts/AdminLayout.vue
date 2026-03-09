@@ -72,6 +72,20 @@
             Galería
           </q-item-section>
         </q-item>
+        <q-item
+          to="/admin/campus-types"
+          exact
+          clickable
+          v-ripple
+          active-class="bg-primary text-white"
+        >
+          <q-item-section avatar>
+            <q-icon name="event" />
+          </q-item-section>
+          <q-item-section>
+            Tipos de campus
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
