@@ -59,7 +59,9 @@ export default defineConfig((ctx) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        STRIPE_PUBLIC_KEY: 'pk_test_51T99Nz1BI3idQG08e94bFuhexEUW9NlWf94SGH4HsNoZtAat81ARL6cAZYB77a2UVZX7iNaxsG58FotlUC7RxFSz00nYV9WErB'
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
