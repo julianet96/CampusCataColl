@@ -26,10 +26,26 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
+    // quasar.config file -> build -> vueRouterMode
+    // quasar.config file -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  if (!process.env.SERVER) {
+    Router.beforeEach((to, from, next) => {
+      if (to.path.startsWith('/admin')) {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          next('/');
+        } else {
+          next();
+        }
+      } else {
+        next();
+      }
+    });
+  }
 
   return Router;
 });

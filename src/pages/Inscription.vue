@@ -1,47 +1,30 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
+import { InscriptionConfigApi } from 'src/api/InscriptionConfigApi';
 
 
-const step= ref(1)
-const total = ref<number>(0)
-const form1 = ref()
-const form2 = ref()
-const inscription = ref<inscriptionData>({} as inscriptionData)
-const steps = ref<inscriptionStape[]>([])
+const step = ref(1);
+const total = ref<number>(0);
+const form1 = ref();
+const form2 = ref();
+const inscription = ref<inscriptionData>({} as inscriptionData);
+const steps = ref<inscriptionStape[]>([]);
 
-const nextStep = async (inscrip:inscriptionStape) => {
-  console.log(inscrip)
-  step.value ++
-}
+const nextStep = async (inscrip: inscriptionStape) => {
+  console.log(inscrip);
+  step.value++;
+};
 
-onMounted(() => {
-   steps.value = [
-  {
-    name: 'Datos personales',
-    icon: 'person',
-    order: 1,
-    inscriptionData: [
-      { type: 'STRING', label: 'Nombre y apellidos', value: '', options: [] },
-      { type: 'NUMBER', label: 'Año de nacimiento', value: '', options: [] },
-    ],
-  },
-  {
-    name: 'Preferencias deportivas',
-    icon: 'sports_soccer',
-    order: 2,
-    inscriptionData: [
-      {
-        type: 'SELECT',
-        label: 'Categoría',
-        value: '',
-        options: ['Infantil', 'Cadete', 'Juvenil'],
-      },
-    ],
-  },
-];
-
-})
+onMounted(async () => {
+  try {
+    const config = await InscriptionConfigApi.getConfig();
+    steps.value = config.steps || [];
+  } catch (error) {
+    console.error('Error cargando configuración de inscripción', error);
+    steps.value = [];
+  }
+});
 
 
 
