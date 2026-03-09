@@ -4,6 +4,7 @@ import { inscriptionData, inscriptionStape } from 'src/entity/inscriptions';
 import { InscriptionConfigApi } from 'src/api/InscriptionConfigApi';
 import { CampusTypeApi, type CampusType } from 'src/api/CampusTypeApi';
 import { PaymentsApi } from 'src/api/PaymentsApi';
+import { InscriptionApi } from 'src/api/InscriptionApi';
 import {
   loadStripe,
   type Stripe,
@@ -175,7 +176,20 @@ const startStripePayment = async () => {
       console.error('Error en el pago con Stripe', result.error);
       paymentError.value = result.error.message || 'No se pudo completar el pago.';
     } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-      paymentSuccess.value = true;
+      // Guardar inscripción en backend
+      try {
+        await InscriptionApi.create({
+          steps: steps.value as unknown as inscriptionStape[],
+          campusTypeId: selectedCampusType.value._id as string,
+          totalAmount: total.value,
+          currency: 'eur',
+          stripePaymentIntentId: result.paymentIntent.id,
+        });
+        paymentSuccess.value = true;
+      } catch (saveError) {
+        console.error('Error guardando la inscripción en backend', saveError);
+        paymentError.value = 'El pago se ha realizado, pero no se pudo guardar la inscripción. Contacta con soporte.';
+      }
     } else {
       paymentError.value = 'El pago no se pudo completar. Inténtalo de nuevo.';
     }
