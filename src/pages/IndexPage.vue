@@ -2,8 +2,10 @@
 import { ContactForm } from 'src/types/ContactType';
 import { Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter()
+const { t } = useI18n();
 
 function goTo(route:string) {
   router.push(route)
@@ -13,12 +15,13 @@ const contactForm = ref<ContactForm>({} as ContactForm)
 </script>
 
 <template>
-  <section class="relative h-[80vh] flex items-center justify-center overflow-hidden">
+  <section class="relative h-[80vh] flex items-center  overflow-hidden">
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('img/Hero_children_playing_football_b8f8b734.png');"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
-    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4" style="font-family: Montserrat, sans-serif;"> CAMPUS CATA COLL</h1>
-      <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto" style="font-family: Montserrat, sans-serif;">Formamos a la próxima generación de futbolistas con entrenadores profesionales, instalaciones de primera clase y programas especializados</p>
+    <div class="relative z-10  px-4 max-w-7xl mx-auto ">
+      <h3 class="text-2xl md:text-4xl lg:text-4xl font-black text-white mb-4" style="font-family: Montserrat, sans-serif;"> ACAD<span class="text-secondary">E</span>M<span class="text-secondary">I</span>A</h3>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-secondary mb-4" style="font-family: Montserrat, sans-serif;">CATA COLL</h1>
+      <p class="text-lg md:text-xl text-white/90 mb-8 mx-auto" style="font-family: Montserrat, sans-serif;">{{ t('home.subtitulo') }}</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center" style="height: 45px;">
         <q-btn label="INSCRIBETÉ AHORA"  color="secondary" text-color="black" class="font-bold-btn" @click="router.push('/inscription')" ></q-btn>
         <q-btn label="GALERÍA"  color="accent" class="font-bold-btn" @click="router.push('/galery')"></q-btn>

@@ -18,15 +18,15 @@ const { t } = useI18n();
 <template>
   <q-layout view="hHh lpR fff">
 
-    <q-header elevated class="bg-primary text-white header" >
+    <q-header elevated class="bg-secondary text-black header" >
       <q-toolbar>
         <div class="header-container">
           <q-toolbar-title>
             <a href="/">
-              <q-avatar square size="70px" class="navbar-avatar">
-                <img src="/img/logo_amarillo-286x300.png">
+              <q-avatar square size="50px" class="navbar-avatar q-mr-md">
+                <img src="img/logoNegreCata.png">
               </q-avatar>
-              <span class="navbar-title font-bold">Campus Cata Coll</span>
+              <span class="navbar-title font-bold">ACADEMIA CATA COLL</span>
             </a>
           </q-toolbar-title>
 
@@ -285,8 +285,8 @@ const { t } = useI18n();
 }
 
 .resalted {
-  background-color: v.$secondary !important;
-  color: black;
+  background-color: v.$primary !important;
+  color: v.$secondary;
 }
 
 .header>div:first-child {
@@ -310,7 +310,7 @@ const { t } = useI18n();
   gap: 10px;
 
   .active {
-    background-color: #424242;
+    background-color: #bbad40;
   }
 
   nav {
@@ -325,7 +325,7 @@ const { t } = useI18n();
     a {
       text-decoration: none;
       font-size: 16px;
-      color: white;
+      color: black;
       font-weight: 500;
     }
   }
@@ -437,7 +437,7 @@ const { t } = useI18n();
       align-items: flex-start;
       gap: 10px;
       border-radius: 30px;
-      background: v.$secondary;
+      background: #0000;
       color: v.$dark_blue;
 
       div {

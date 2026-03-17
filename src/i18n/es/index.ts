@@ -10,5 +10,8 @@ export default {
         galery: 'GALERÍA',
         contact: 'CONTACTO',
         inscription: 'INSCRIBIRSE'
+    },
+    home: {
+        subtitulo: 'Programas de formación específicos tanto para porteras/os como jugadoras/es'
     }
 }

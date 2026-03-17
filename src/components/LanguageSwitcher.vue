@@ -47,13 +47,13 @@ const changeLanguage = (newLocale: string) => {
 .language-selector label {
   width: 100%;
   border-radius: 50px;
-  border: 1px hsla(0, 0%, 100%, 0.5) solid;
+  border: 1px black solid;
 }
 </style>
 
 <style>
 .q-field--auto-height.q-field--dense .q-field__control, .q-field--auto-height.q-field--dense .q-field__native {
-  color: white;
+  color: black;
 }
 
 .q-field--outlined .q-field__control:before {
@@ -61,7 +61,7 @@ const changeLanguage = (newLocale: string) => {
 }
 
 .q-select__dropdown-icon {
-  color: white;
+  color: black;
 }
 
 @media (max-width: 1024px) {

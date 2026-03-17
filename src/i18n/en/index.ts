@@ -10,5 +10,8 @@ export default {
         galery: 'GALLERY',
         contact: 'CONTACT',
         inscription: 'REGISTER'
+    },
+    home: {
+        subtitulo: 'Specific training programs for both goalkeepers and players'
     }
 }
